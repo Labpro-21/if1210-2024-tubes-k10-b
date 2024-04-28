@@ -1,6 +1,6 @@
 from typing import TextIO
-from helper.Splitter import splitter
-from helper.IsType import is_number
+from .helper.Splitter import splitter
+from .helper.IsType import is_number
 
 
 def show() -> None:
@@ -99,6 +99,7 @@ def add_monster() -> None:
         monster_data: TextIO = open('./data/monster.csv', 'a')
         monster_data.write("%s;%s;%s;%s;%s\n" % (idn+1, name, atk_power, def_power, hp))
         monster_data.close()
+        print("Monster baru telah ditambahkan!")
 
 
 def monster_management() -> None:

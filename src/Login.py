@@ -1,5 +1,5 @@
 from typing import TextIO, List
-from helper.Splitter import splitter
+from .helper.Splitter import splitter
 
 
 def get_user(data: str) -> List[str]:
@@ -11,13 +11,18 @@ def verification(user: str, password: str) -> bool:
     for data in user_data.readlines():
         row: List[str] = get_user(data)
         if user == row[1] and password == row[2]:
+            print("You are logged in as", end=" ")
             if "Admin" == row[3]:
+                print('Admin!')
                 return 0
+            print('Agent!')
             return 1
-        elif user == row[0] and password != row[1]:
+        elif user == row[1] and password != row[2]:
+            print('Wrong password, try again!')
             return 2
 
     user_data.close()
+    print("Username doesn't exist!")
     return 3
 
 

@@ -13,7 +13,7 @@ def result(n: int, arr: List[str], idx: int, data: str, pos: int) -> None:
     if pos == n+1:
         return
     elem: str = ""
-    while data[idx] != ';':
+    while data[idx] != ';' and data[idx] != '\n':
         elem += data[idx]
         idx += 1
     arr[pos] = elem

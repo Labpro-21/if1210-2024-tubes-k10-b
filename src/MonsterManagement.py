@@ -1,4 +1,4 @@
-from typing import TextIO
+from typing import TextIO, List
 from .helper.Splitter import splitter
 from .helper.IsType import is_number
 
@@ -16,18 +16,18 @@ def get_type() -> str:
     def is_added(name) -> bool:
         monster_data: TextIO = open('./data/monster.csv', 'r')
         for data in monster_data.readlines():
-            row = splitter(data)
+            row: List[str] = splitter(data)
             if name == row[1]:
                 monster_data.close()
                 return True
         monster_data.close()
         return False
 
-    name = input(">>> Masukkan Type / Nama: ")
+    name: str = input(">>> Masukkan Type / Nama: ")
     while is_added(type):
         print("Nama sudah terdaftar, coba lagi!")
         print()
-        name = input(">>> Masukkan Type / Nama: ")
+        name: str = input(">>> Masukkan Type / Nama: ")
     return name
 
 
@@ -70,7 +70,7 @@ def get_hp() -> str:
 
 def get_last_id() -> int:
     monster_data: TextIO = open('./data/monster.csv', 'r')
-    data = monster_data.readlines()
+    data: List[str] = monster_data.readlines()
     last_id: int = data[len(data)-1][0]
     monster_data.close()
     return int(last_id)
@@ -92,12 +92,13 @@ def add_monster() -> None:
     print("DEF Power:", def_power)
     print("HP:", hp)
 
-    choice = input("Tambahkan Monster ke database (Y/N): ")
+    choice: str = input("Tambahkan Monster ke database (Y/N): ")
     while choice.upper() != 'Y' and choice.upper() != 'N':
-        choice = input("Tambahkan Monster ke database (Y/N): ")
+        choice: str = input("Tambahkan Monster ke database (Y/N): ")
     if choice.upper() == 'Y':
         monster_data: TextIO = open('./data/monster.csv', 'a')
-        monster_data.write("%s;%s;%s;%s;%s\n" % (idn+1, name, atk_power, def_power, hp))
+        monster_data.write("%s;%s;%s;%s;%s\n" %
+                           (idn+1, name, atk_power, def_power, hp))
         monster_data.close()
         print("Monster baru telah ditambahkan!")
 
@@ -112,4 +113,4 @@ def monster_management() -> None:
     elif choice == '2':
         add_monster()
     else:
-        monster_management()    
+        monster_management()

@@ -1,26 +1,23 @@
 from typing import TextIO, List
 from .helper.Splitter import splitter
 from .helper.IsType import is_number
+from .helper.ListManipulation import table_print, to_list
+from .helper.Readline import readlines
 
 
 def show() -> None:
-    monster_data: TextIO = open('./data/monster.csv', 'r')
-    print("ID\t| Type\t\t | ATK Power\t | DEF Power\t | HP")
-    for data in monster_data.readlines():
-        row = splitter(data)
-        print(f"{row[0]}\t| {row[1]}\t | {row[2]}\t\t | {row[3]}\t | {row[4]}")
-    monster_data.close()
+    monster_data: TextIO = readlines('./data/monster.csv')
+    table_print(to_list(monster_data))
 
 
 def get_type() -> str:
     def is_added(name) -> bool:
-        monster_data: TextIO = open('./data/monster.csv', 'r')
-        for data in monster_data.readlines():
+        monster_data: TextIO = readlines('./data/monster.csv')
+        for data in monster_data:
             row: List[str] = splitter(data)
             if name == row[1]:
                 monster_data.close()
                 return True
-        monster_data.close()
         return False
 
     name: str = input(">>> Masukkan Type / Nama: ")
@@ -69,10 +66,9 @@ def get_hp() -> str:
 
 
 def get_last_id() -> int:
-    monster_data: TextIO = open('./data/monster.csv', 'r')
-    data: List[str] = monster_data.readlines()
+    monster_data: TextIO = readlines('./data/monster.csv')
+    data: List[str] = monster_data
     last_id: int = data[len(data)-1][0]
-    monster_data.close()
     return int(last_id)
 
 

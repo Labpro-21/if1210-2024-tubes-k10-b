@@ -2,6 +2,7 @@ from typing import TextIO, List
 from .helper.Splitter import splitter
 from .helper.ListManipulation import table_print, to_list
 from .helper.Readline import readlines
+from .helper.IsType import is_number
 
 
 def concat(a1: List[str], a2: List[str]) -> List[List[str]]:
@@ -31,32 +32,91 @@ def concat(a1: List[str], a2: List[str]) -> List[List[str]]:
     return new_arr
 
 
+def show(c: str) -> None:
+    if c == 'monster':
+        monster_shop: TextIO = readlines('./data/monster_shop.csv')
+        monster: TextIO = readlines('./data/monster.csv')
+        monster_to_print: List[str] = concat(monster, monster_shop)
+        table_print(monster_to_print)
+    elif c == 'potion':
+        item_shop: TextIO = readlines('./data/item_shop.csv')
+        table_print(to_list(item_shop))
+
+
 def lihat():
     breaked: bool = False
     while not breaked:
         c: str = input(">>> Mau lihat apa? (monster/potion): ")
-        if c == 'monster':
-            monster_shop: TextIO = readlines('./data/monster_shop.csv')
-            monster: TextIO = readlines('./data/monster.csv')
-            monster_to_print: List[str] = concat(monster, monster_shop)
-            table_print(monster_to_print)
-            breaked: bool = True
-        elif c == 'potion':
-            item_shop: TextIO = readlines('./data/item_shop.csv')
-            table_print(to_list(item_shop))
+        show(c)
+        if c in ['monster', 'potion']:
             breaked: bool = True
 
+
+def is_in(arr: List[str], e: str, idx: int) -> bool:
+    for i in arr:
+        if i[idx] == e:
+            return True
+    return False
+
+
 def tambah() -> None:
+    breaked: bool = False
+    while not breaked:
+        c: str = input(">>> Mau lihat apa? (monster/potion): ")
+        if c in ['monster', 'potion']:
+            breaked = True
+    for i in ['Healing Potion']:
+        if not is_in(monster, i, 1):
+            return
     return
+
 
 def ubah() -> None:
     return
 
+
+def write_without(path: str, idx: str) -> None:
+    data: List[str] = readlines(path)
+    data_2d: List[List[str]] = to_list(data)
+    data_to_write: TextIO = open(path, 'w')
+    txt_to_write: str = ""
+    for i in range(len(data)):
+        if data_2d[i][0] != idx:
+            txt_to_write += data[i]
+    data_to_write.write(txt_to_write)
+    data_to_write.close()
+
+
 def hapus() -> None:
+    breaked: bool = False
+    while not breaked:
+        c: str = input(">>> Mau lihat apa? (monster/potion): ")
+        show(c)
+        if c in ['monster', 'potion']:
+            breaked = True
+    monster_shop: TextIO = readlines('./data/monster_shop.csv')
+    monster: TextIO = readlines('./data/monster.csv')
+    monster_list: List[List[str]] = concat(monster, monster_shop)
+    idx: str = input(">>> Masukkan id monster: ")
+    while not (is_number(idx) and is_in(monster_list, idx, 0)):
+        if not is_number(idx):
+            print("Masukkan input bertipe Integer, coba lagi!")
+        else:
+            print("ID tidak ada dalam data!")
+        print()
+        idx = input(">>> Masukkan id monster: ")
+    is_hapus: str = ""
+    while is_hapus.lower() not in ['y', 'n']:
+        is_hapus: str = input(
+            ">>> Apakah anda yakin ingin menghapus Strength Potion dari shop (y/n)? ")
+        if is_hapus.lower() == 'y':
+            write_without('./data/monster.csv', idx)
+            write_without('./data/monster_shop.csv', idx)
     return
 
+
 def shop_management() -> None:
-    print("Irasshaimase! Selamat datang kembali, Mr. Monogram!\n")
+    print("Irasshaimase! Selamat datang kembali, Mr. Admin!\n")
     breaked: bool = False
     while not breaked:
         act: str = input(">>> Pilih aksi (lihat/tambah/ubah/hapus/keluar): ")
@@ -73,6 +133,7 @@ def shop_management() -> None:
             hapus()
             breaked: bool = True
         elif act.lower() == 'keluar':
+            print("Dadah Mr. Admin")
             breaked: bool = True
 
     return

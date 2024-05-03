@@ -1,6 +1,6 @@
 from typing import TextIO, List
 from .helper.Splitter import splitter
-from .helper.ListManipulation import table_print, to_list
+from .helper.ListManipulation import table_print, to_list, join
 from .helper.Readline import readlines
 from .helper.IsType import is_number
 
@@ -43,13 +43,33 @@ def ubah() -> None:
         idx: str = get_idx(monster_list, 'monster')
         stock: str = get_stock()
         price: str = get_price()
+        txt_to_write: str = ""
+        for i in range(len(monster_shop)):
+            data = splitter(monster_shop[i])
+            if data[0] == idx:
+                if stock != "":
+                    data[1] = stock
+                if price != "":
+                    data[2] = price
+            txt_to_write += join(data) + '\n'
+        write_it_out('./data/monster_shop.csv', txt_to_write)
     elif c == 'potion':
         potion: List[List[str]] = add_id(
             to_list(readlines('./data/item_shop.csv')))
         idx: str = get_idx(potion, 'potion')
         stock: str = get_stock()
         price: str = get_price()
-
+        potion: List[str] = readlines('./data/item_shop.csv')
+        txt_to_write: str = ""
+        for i in range(len(potion)):
+            data = splitter(potion[i])
+            if i == int(idx):
+                if stock != "":
+                    data[1] = stock
+                if price != "":
+                    data[2] = price
+            txt_to_write += join(data) + '\n'
+        write_it_out('./data/item_shop.csv', txt_to_write)
     return
 
 
@@ -98,6 +118,12 @@ def shop_management() -> None:
             print("Dadah Mr. Admin")
             breaked: bool = True
     return
+
+
+def write_it_out(path: str, txt: str) -> None:
+    data: TextIO = open(path, 'w')
+    data.write(txt)
+    data.close()
 
 
 def concat(a1: List[str], a2: List[str]) -> List[List[str]]:

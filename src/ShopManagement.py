@@ -21,11 +21,42 @@ def tambah() -> None:
         if c in ['monster', 'potion']:
             breaked = True
     if c == 'monster':
-        pass
+        contoh: List[List[str]] = [["ID", "Type", "ATK Power", "DEF Power", "HP"],
+                                   ["4", "Cici", "10", "1000", "200"],
+                                   ["5", "Moskov", "20", "1000", "200"],
+                                   ["6", "Selena", "30", "430", "100"]]
+        monster = to_list(readlines('./data/monster.csv'))
+        arr = []
+        for i in contoh:
+            if is_in(monster, i[0], 0) == -1:
+                arr.append(i)
+        table_print(arr)
+        idx: str = get_idx(arr, 'monster')
+        stock: str = get_stock()
+        price: str = get_price()
+        monster: TextIO = open('./data/monster.csv', 'a')
+        monster_shop: TextIO = open('./data/monster_shop.csv', 'a')
+        idn: str = is_in(arr, idx, 0)
+        monster.write("%s\n" % (join(arr[idn])))
+        monster_shop.write("%s;%s;%s\n" % (arr[idn][0], stock, price))
+        monster.close()
+        monster_shop.close()
     elif c == 'potion':
-        for i in ['Healing Potion']:
-            if not is_in(monster, i, 1):
-                pass
+        contoh: List[List[str]] = [["ID", "Type"],
+                                   ["3", "Healing Potion"]]
+        arr = []
+        potion = to_list(readlines('./data/item_shop.csv'))
+        for i in contoh:
+            if is_in(potion, i[0], 0) == -1:
+                arr.append(i)
+        table_print(arr)
+        idx: str = get_idx(arr, 'potion')
+        stock: str = get_stock()
+        price: str = get_price()
+        potion: TextIO = open('./data/item_shop.csv', 'a')
+        idn: str = is_in(arr, idx, 0)
+        potion.write("%s;%s;%s\n" % (arr[idn][1], stock, price))
+        potion.close()
     return
 
 

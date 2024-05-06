@@ -57,3 +57,12 @@ def bubble_sort(data: List[str]) -> None:
         for j in range(0, n-i-1):
             if data[j] > data[j+1]:
                 data[j], data[j+1] = data[j+1], data[j]
+
+def join(data: List[str]) -> str:
+    txt: str = ""
+    col: int = len(data)
+    for i in range(col):
+        txt += data[i]
+        if i != col-1:
+            txt += ';'
+    return txt

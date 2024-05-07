@@ -5,16 +5,16 @@ from .helper.Readline import readlines
 from .helper.IsType import is_number
 
 
-def lihat():
+def lihat(folder_name):
     breaked: bool = False
     while not breaked:
         c: str = input(">>> Mau lihat apa? (monster/potion): ")
-        show(c)
+        show(c, folder_name)
         if c in ['monster', 'potion']:
             breaked: bool = True
 
 
-def tambah() -> None:
+def tambah(folder_name: str) -> None:
     breaked: bool = False
     while not breaked:
         c: str = input(">>> Mau lihat apa? (monster/potion): ")
@@ -25,7 +25,7 @@ def tambah() -> None:
                                    ["4", "Cici", "10", "1000", "200"],
                                    ["5", "Moskov", "20", "1000", "200"],
                                    ["6", "Selena", "30", "430", "100"]]
-        monster = to_list(readlines('./data/monster.csv'))
+        monster = to_list(readlines('./data/%s/monster.csv' % (folder_name)))
         arr = []
         for i in contoh:
             if is_in(monster, i[0], 0) == -1:
@@ -34,8 +34,9 @@ def tambah() -> None:
         idx: str = get_idx(arr, 'monster')
         stock: str = get_stock()
         price: str = get_price()
-        monster: TextIO = open('./data/monster.csv', 'a')
-        monster_shop: TextIO = open('./data/monster_shop.csv', 'a')
+        monster: TextIO = open('./data/%s/monster.csv' % (folder_name), 'a')
+        monster_shop: TextIO = open(
+            './data/%s/monster_shop.csv' % (folder_name), 'a')
         idn: str = is_in(arr, idx, 0)
         monster.write("%s\n" % (join(arr[idn])))
         monster_shop.write("%s;%s;%s\n" % (arr[idn][0], stock, price))
@@ -45,7 +46,7 @@ def tambah() -> None:
         contoh: List[List[str]] = [["ID", "Type"],
                                    ["3", "Healing Potion"]]
         arr = []
-        potion = to_list(readlines('./data/item_shop.csv'))
+        potion = to_list(readlines('./data/%s/item_shop.csv' % (folder_name)))
         for i in contoh:
             if is_in(potion, i[0], 0) == -1:
                 arr.append(i)
@@ -53,14 +54,14 @@ def tambah() -> None:
         idx: str = get_idx(arr, 'potion')
         stock: str = get_stock()
         price: str = get_price()
-        potion: TextIO = open('./data/item_shop.csv', 'a')
+        potion: TextIO = open('./data/%s/item_shop.csv' % (folder_name), 'a')
         idn: str = is_in(arr, idx, 0)
         potion.write("%s;%s;%s\n" % (arr[idn][1], stock, price))
         potion.close()
     return
 
 
-def ubah() -> None:
+def ubah(folder_name: str) -> None:
     breaked: bool = False
     while not breaked:
         c: str = input(">>> Mau lihat apa? (monster/potion): ")
@@ -68,8 +69,9 @@ def ubah() -> None:
         if c in ['monster', 'potion']:
             breaked = True
     if c == 'monster':
-        monster_shop: List[str] = readlines('./data/monster_shop.csv')
-        monster: List[str] = readlines('./data/monster.csv')
+        monster_shop: List[str] = readlines(
+            './data/%s/monster_shop.csv' % (folder_name))
+        monster: List[str] = readlines('./data/%s/monster.csv' % (folder_name))
         monster_list: List[List[str]] = concat(monster, monster_shop)
         idx: str = get_idx(monster_list, 'monster')
         stock: str = get_stock()
@@ -83,14 +85,16 @@ def ubah() -> None:
                 if price != "":
                     data[2] = price
             txt_to_write += join(data) + '\n'
-        write_it_out('./data/monster_shop.csv', txt_to_write)
+        write_it_out('./data/%s/monster_shop.csv' %
+                     (folder_name), txt_to_write)
     elif c == 'potion':
         potion: List[List[str]] = add_id(
-            to_list(readlines('./data/item_shop.csv')))
+            to_list(readlines('./data/%s/item_shop.csv' % (folder_name))))
         idx: str = get_idx(potion, 'potion')
         stock: str = get_stock()
         price: str = get_price()
-        potion: List[str] = readlines('./data/item_shop.csv')
+        potion: List[str] = readlines(
+            './data/%s/item_shop.csv' % (folder_name))
         txt_to_write: str = ""
         for i in range(len(potion)):
             data = splitter(potion[i])
@@ -100,11 +104,11 @@ def ubah() -> None:
                 if price != "":
                     data[2] = price
             txt_to_write += join(data) + '\n'
-        write_it_out('./data/item_shop.csv', txt_to_write)
+        write_it_out('./data/%s/item_shop.csv' % (folder_name), txt_to_write)
     return
 
 
-def hapus() -> None:
+def hapus(folder_name: str) -> None:
     breaked: bool = False
     while not breaked:
         c: str = input(">>> Mau lihat apa? (monster/potion): ")
@@ -112,38 +116,39 @@ def hapus() -> None:
         if c in ['monster', 'potion']:
             breaked = True
     if c == 'monster':
-        monster_shop: List[str] = readlines('./data/monster_shop.csv')
-        monster: List[str] = readlines('./data/monster.csv')
+        monster_shop: List[str] = readlines(
+            './data/%s/monster_shop.csv' % (folder_name))
+        monster: List[str] = readlines('./data/%s/monster.csv' % (folder_name))
         monster_list: List[List[str]] = concat(monster, monster_shop)
         idx: str = get_idx(monster_list, 'monster')
         if verification_hapus():
-            write_without('./data/monster_shop.csv', idx)
-            write_without('./data/monster.csv', idx)
+            write_without('./data/%s/monster_shop.csv' % (folder_name), idx)
+            write_without('./data/%s/monster.csv' % (folder_name), idx)
     elif c == 'potion':
         potion: List[List[str]] = add_id(
-            to_list(readlines('./data/item_shop.csv')))
+            to_list(readlines('./data/%s/item_shop.csv' % (folder_name))))
         idx: str = get_idx(potion, 'potion')
         if verification_hapus():
-            write_without('./data/item_shop.csv', idx, True)
+            write_without('./data/%s/item_shop.csv' % (folder_name), idx, True)
     return
 
 
-def shop_management() -> None:
+def shop_management(folder_name: str) -> None:
     print("Irasshaimase! Selamat datang kembali, Mr. Admin!\n")
     breaked: bool = False
     while not breaked:
         act: str = input(">>> Pilih aksi (lihat/tambah/ubah/hapus/keluar): ")
         if act.lower() == 'lihat':
-            lihat()
+            lihat(folder_name)
             breaked: bool = True
         elif act.lower() == 'tambah':
-            tambah()
+            tambah(folder_name)
             breaked: bool = True
         elif act.lower() == 'ubah':
-            ubah()
+            ubah(folder_name)
             breaked: bool = True
         elif act.lower() == 'hapus':
-            hapus()
+            hapus(folder_name)
             breaked: bool = True
         elif act.lower() == 'keluar':
             print("Dadah Mr. Admin")
@@ -262,12 +267,14 @@ def get_idx(data: List[List[str]], txt: str) -> str:
     return idx
 
 
-def show(c: str) -> None:
+def show(c: str, folder_name: str) -> None:
     if c == 'monster':
-        monster_shop: TextIO = readlines('./data/monster_shop.csv')
-        monster: TextIO = readlines('./data/monster.csv')
+        monster_shop: TextIO = readlines(
+            './data/%s/monster_shop.csv' % (folder_name))
+        monster: TextIO = readlines('./data/%s/monster.csv' % (folder_name))
         monster_to_print: List[str] = concat(monster, monster_shop)
         table_print(monster_to_print)
     elif c == 'potion':
-        item_shop: TextIO = readlines('./data/item_shop.csv')
+        item_shop: TextIO = readlines(
+            './data/%s/item_shop.csv' % (folder_name))
         table_print(add_id(to_list(item_shop)))

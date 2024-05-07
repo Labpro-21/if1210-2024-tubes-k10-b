@@ -4,8 +4,8 @@ from .helper.IsType import is_number
 from typing import List, Tuple
 
 
-def get_item_data(idn: str) -> List[List[str]]:
-    item: List[List[str]] = to_list(readlines('./data/item_inventory.csv'))
+def get_item_data(idn: str, folder_name: str) -> List[List[str]]:
+    item: List[List[str]] = to_list(readlines('./data/%s/item_inventory.csv' % (folder_name)))
     arr = []
     for i in item:
         if i[0] == idn:
@@ -13,9 +13,9 @@ def get_item_data(idn: str) -> List[List[str]]:
     return arr
 
 
-def get_monster_data(idn: str) -> List[List[str]]:
+def get_monster_data(idn: str, folder_name: str) -> List[List[str]]:
     monster: List[List[str]] = to_list(
-        readlines('./data/monster_inventory.csv'))
+        readlines('./data/%s/monster_inventory.csv' % (folder_name)))
     arr = []
     for i in monster:
         if i[0] == idn:
@@ -40,21 +40,13 @@ def concat_monster_item(a1: List[List[str]], a2: List[List[str]]) -> List[Tuple[
     return arr
 
 
-'''
-LOGIN
-b
-b
-INVENTORY
-'''
-
-
-def inventory(data: List[str]) -> None:
+def inventory(data: List[str], folder_name: str) -> None:
     print("============ INVENTORY LIST (User ID: %s) ============" % (data[0]))
     print("Jumlah O.W.C.A. Coin-mu sekarang %s." % (data[4]))
-    monster_inv: List[List[str]] = get_monster_data(data[0])
-    monster: List[List[str]] = to_list(readlines('./data/monster.csv'))
+    monster_inv: List[List[str]] = get_monster_data(data[0], folder_name)
+    monster: List[List[str]] = to_list(readlines('./data/%s/monster.csv' % (folder_name)))
     concat_monster(monster_inv, monster)
-    item_inv: List[List[str]] = get_item_data(data[0])
+    item_inv: List[List[str]] = get_item_data(data[0], folder_name)
     num: int = 1
     all_data: List[List[str]] = concat_monster_item(monster_inv, item_inv)
     for inv in monster_inv:
@@ -92,6 +84,6 @@ def inventory(data: List[str]) -> None:
                     print("Quantity  : %s" % (all_data[c][1][2]))
             else:
                 print("Indeks yang dimasukkan tidak ada!")
-        
+
         elif c != 'KELUAR':
             print("Masukkan bilangan integer positif!")

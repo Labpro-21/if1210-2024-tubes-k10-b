@@ -5,14 +5,14 @@ from .helper.ListManipulation import table_print, to_list
 from .helper.Readline import readlines
 
 
-def show() -> None:
-    monster_data: TextIO = readlines('./data/monster.csv')
+def show(folder_name) -> None:
+    monster_data: TextIO = readlines('./data/%s/monster.csv' % (folder_name))
     table_print(to_list(monster_data))
 
 
-def get_type() -> str:
+def get_type(folder_name) -> str:
     def is_added(name) -> bool:
-        monster_data: TextIO = readlines('./data/monster.csv')
+        monster_data: TextIO = readlines('./data/%s/monster.csv' % (folder_name))
         for data in monster_data:
             row: List[str] = splitter(data)
             if name == row[1]:
@@ -65,8 +65,8 @@ def get_hp() -> str:
     return hp
 
 
-def get_last_id() -> int:
-    monster_data: TextIO = readlines('./data/monster.csv')
+def get_last_id(folder_name) -> int:
+    monster_data: TextIO = readlines('./data/%s/monster.csv' % (folder_name))
     data: List[str] = monster_data
     last_id: int = data[len(data)-1][0]
     return int(last_id)
@@ -99,14 +99,14 @@ def add_monster() -> None:
         print("Monster baru telah ditambahkan!")
 
 
-def monster_management() -> None:
+def monster_management(folder_name: str) -> None:
     print("SELAMAT DATANG DI DATABASE PARA MONSTER!!!")
     print("1. Tampilkan semua Monster")
     print("2. Tambah Monster baru")
     choice = input(">>> Pilih aksi: ")
     if choice == '1':
-        show()
+        show(folder_name)
     elif choice == '2':
         add_monster()
     else:
-        monster_management()
+        monster_management(folder_name)

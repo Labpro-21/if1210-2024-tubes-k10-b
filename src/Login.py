@@ -1,27 +1,24 @@
 from typing import TextIO, List, Tuple
 from .helper.Splitter import splitter
-
-
-def get_user(data: str) -> List[str]:
-    return splitter(data)
+from .helper.ListManipulation import to_list
+from .helper.Readline import readlines
 
 
 def verification(user: str, password: str, folder_name: str) -> Tuple[List[str], int]:
-    user_data: TextIO = open('./data/%s/user.csv' % (folder_name), 'r')
-    for data in user_data.readlines():
-        row: List[str] = get_user(data)
+    user_data: TextIO = to_list(
+        readlines('./data/%s/user.csv' % (folder_name)))
+    for row in user_data:
         if user == row[1] and password == row[2]:
             print("You are logged in as", end=" ")
             if "Admin" == row[3]:
                 print('Admin!')
-                return ([], 0)
+                return (row, 0)
             print('Agent!')
             return (row, 1)
         elif user == row[1] and password != row[2]:
             print('Wrong password, try again!')
             return ([], 1)
 
-    user_data.close()
     print("Username doesn't exist!")
     return ([], 3)
 

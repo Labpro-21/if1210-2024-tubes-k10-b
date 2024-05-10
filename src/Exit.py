@@ -1,11 +1,13 @@
 from src.Save import save
+from typing import List
 
+type Vector = List[List[str]]
 
-def leave(is_admin: bool) -> None:
+def leave(data: Vector) -> None:
     choice = input(
         'Apakah Anda mau melakukan penyimpanan file yang sudah diubah? (y/n) ')
     if choice.lower() == 'y':
-        save(is_admin)
+        save(data)
     else:
         if choice.lower() != 'n':
-            leave()
+            leave(data)

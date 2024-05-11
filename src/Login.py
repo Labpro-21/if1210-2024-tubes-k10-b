@@ -8,15 +8,12 @@ type Matrix = List[List[str]]
 def verification(user: str, password: str, user_data: Matrix) -> Tuple[List[str], int]:
     for row in user_data:
         if user == row[1] and password == row[2]:
-            arr: List[str] = []
-            for i in row:
-                arr.append(i)
             print("You are logged in as", end=" ")
             if "Admin" == row[3]:
                 print('Admin!')
-                return (arr, 0)
+                return (row, 0)
             print('Agent!')
-            return (arr, 1)
+            return (row, 1)
         elif user == row[1] and password != row[2]:
             print('Wrong password, try again!')
             return ([], 1)

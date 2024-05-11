@@ -1,8 +1,10 @@
-from typing import TextIO, List
+from typing import TextIO, List, Dict
 from .helper.Splitter import splitter
-from .helper.ListManipulation import table_print, to_list, join
-from .helper.Readline import readlines
+from .helper.ListManipulation import table_print, to_list, join, readlines
 from .helper.IsType import is_number
+
+type Matrix = List[List[str]]
+type Mapping = Dict[str, Matrix]
 
 
 def lihat(folder_name):
@@ -14,18 +16,18 @@ def lihat(folder_name):
             breaked: bool = True
 
 
-def tambah(folder_name: str) -> None:
+def tambah(user_data: Mapping) -> None:
     breaked: bool = False
     while not breaked:
         c: str = input(">>> Mau lihat apa? (monster/potion): ")
         if c in ['monster', 'potion']:
             breaked = True
     if c == 'monster':
-        contoh: List[List[str]] = [["ID", "Type", "ATK Power", "DEF Power", "HP"],
-                                   ["4", "Cici", "10", "1000", "200"],
-                                   ["5", "Moskov", "20", "1000", "200"],
-                                   ["6", "Selena", "30", "430", "100"]]
-        monster = to_list(readlines('./data/%s/monster.csv' % (folder_name)))
+        contoh: Matrix = [["ID", "Type", "ATK Power", "DEF Power", "HP"],
+                          ["4", "Cici", "10", "1000", "200"],
+                          ["5", "Moskov", "20", "1000", "200"],
+                          ["6", "Selena", "30", "430", "100"]]
+        monster = user_data["monster.csv"]
         arr = []
         for i in contoh:
             if is_in(monster, i[0], 0) == -1:
@@ -34,19 +36,14 @@ def tambah(folder_name: str) -> None:
         idx: str = get_idx(arr, 'monster')
         stock: str = get_stock()
         price: str = get_price()
-        monster: TextIO = open('./data/%s/monster.csv' % (folder_name), 'a')
-        monster_shop: TextIO = open(
-            './data/%s/monster_shop.csv' % (folder_name), 'a')
         idn: str = is_in(arr, idx, 0)
-        monster.write("%s\n" % (join(arr[idn])))
-        monster_shop.write("%s;%s;%s\n" % (arr[idn][0], stock, price))
-        monster.close()
-        monster_shop.close()
+        user_data["monster.csv"].append(arr[idn])
+        user_data["monster_shop.csv"].append([arr[idn][0], stock, price])
     elif c == 'potion':
-        contoh: List[List[str]] = [["ID", "Type"],
-                                   ["3", "Healing Potion"]]
+        contoh: Matrix = [["ID", "Type"],
+                          ["3", "Healing Potion"]]
         arr = []
-        potion = to_list(readlines('./data/%s/item_shop.csv' % (folder_name)))
+        potion = user_data["item_shop.csv"]
         for i in contoh:
             if is_in(potion, i[0], 0) == -1:
                 arr.append(i)
@@ -54,101 +51,94 @@ def tambah(folder_name: str) -> None:
         idx: str = get_idx(arr, 'potion')
         stock: str = get_stock()
         price: str = get_price()
-        potion: TextIO = open('./data/%s/item_shop.csv' % (folder_name), 'a')
-        idn: str = is_in(arr, idx, 0)
-        potion.write("%s;%s;%s\n" % (arr[idn][1], stock, price))
-        potion.close()
+        idn: int = is_in(arr, idx, 0)
+        user_data["item_shop.csv"].append([arr[idn][1], stock, price])
     return
 
 
-def ubah(folder_name: str) -> None:
+def ubah(user_data: Mapping) -> None:
     breaked: bool = False
     while not breaked:
         c: str = input(">>> Mau lihat apa? (monster/potion): ")
-        show(c)
+        show(c, user_data)
         if c in ['monster', 'potion']:
             breaked = True
     if c == 'monster':
-        monster_shop: List[str] = readlines(
-            './data/%s/monster_shop.csv' % (folder_name))
-        monster: List[str] = readlines('./data/%s/monster.csv' % (folder_name))
-        monster_list: List[List[str]] = concat(monster, monster_shop)
+        monster_shop: List[str] = user_data["monster_shop.csv"]
+        monster_list: Matrix = concat(
+            user_data["monster.csv"], user_data["monster_shop.csv"])
         idx: str = get_idx(monster_list, 'monster')
         stock: str = get_stock()
         price: str = get_price()
         txt_to_write: str = ""
         for i in range(len(monster_shop)):
-            data = splitter(monster_shop[i])
-            if data[0] == idx:
+            row = monster_shop[i]
+            if row[0] == idx:
                 if stock != "":
-                    data[1] = stock
+                    row[1] = stock
                 if price != "":
-                    data[2] = price
-            txt_to_write += join(data) + '\n'
-        write_it_out('./data/%s/monster_shop.csv' %
-                     (folder_name), txt_to_write)
+                    row[2] = price
+                return
     elif c == 'potion':
-        potion: List[List[str]] = add_id(
-            to_list(readlines('./data/%s/item_shop.csv' % (folder_name))))
+        potion: Matrix = add_id(user_data["item_shop.csv"])
         idx: str = get_idx(potion, 'potion')
         stock: str = get_stock()
         price: str = get_price()
-        potion: List[str] = readlines(
-            './data/%s/item_shop.csv' % (folder_name))
+        potion: List[str] = user_data["item_shop.csv"]
         txt_to_write: str = ""
         for i in range(len(potion)):
-            data = splitter(potion[i])
+            data = potion[i]
             if i == int(idx):
                 if stock != "":
                     data[1] = stock
                 if price != "":
                     data[2] = price
-            txt_to_write += join(data) + '\n'
-        write_it_out('./data/%s/item_shop.csv' % (folder_name), txt_to_write)
+            return
     return
 
 
-def hapus(folder_name: str) -> None:
+def hapus(user_data: Mapping) -> None:
     breaked: bool = False
     while not breaked:
         c: str = input(">>> Mau lihat apa? (monster/potion): ")
-        show(c)
+        show(c, user_data)
         if c in ['monster', 'potion']:
             breaked = True
     if c == 'monster':
-        monster_shop: List[str] = readlines(
-            './data/%s/monster_shop.csv' % (folder_name))
-        monster: List[str] = readlines('./data/%s/monster.csv' % (folder_name))
-        monster_list: List[List[str]] = concat(monster, monster_shop)
+        monster_shop: Matrix = user_data["monster_shop.csv"]
+        monster: Matrix = user_data["monster.csv"]
+        monster_list: Matrix = concat(monster, monster_shop)
         idx: str = get_idx(monster_list, 'monster')
-        if verification_hapus():
-            write_without('./data/%s/monster_shop.csv' % (folder_name), idx)
-            write_without('./data/%s/monster.csv' % (folder_name), idx)
+        if verification_hapus(idx, monster_list):
+            user_data["monster_shop.csv"] = write_without(
+                user_data["monster_shop.csv"], idx)
+            user_data["monster.csv"] = write_without(
+                user_data["monster.csv"], idx)
     elif c == 'potion':
-        potion: List[List[str]] = add_id(
-            to_list(readlines('./data/%s/item_shop.csv' % (folder_name))))
+        potion: Matrix = add_id(user_data["item_shop.csv"])
         idx: str = get_idx(potion, 'potion')
-        if verification_hapus():
-            write_without('./data/%s/item_shop.csv' % (folder_name), idx, True)
+        if verification_hapus(idx, potion):
+            user_data["item_shop.csv"] = write_without(
+                user_data["item_shop.csv"], idx, True)
     return
 
 
-def shop_management(folder_name: str) -> None:
+def shop_management(user_data: Mapping) -> None:
     print("Irasshaimase! Selamat datang kembali, Mr. Admin!\n")
     breaked: bool = False
     while not breaked:
         act: str = input(">>> Pilih aksi (lihat/tambah/ubah/hapus/keluar): ")
         if act.lower() == 'lihat':
-            lihat(folder_name)
+            lihat(user_data)
             breaked: bool = True
         elif act.lower() == 'tambah':
-            tambah(folder_name)
+            tambah(user_data)
             breaked: bool = True
         elif act.lower() == 'ubah':
-            ubah(folder_name)
+            ubah(user_data)
             breaked: bool = True
         elif act.lower() == 'hapus':
-            hapus(folder_name)
+            hapus(user_data)
             breaked: bool = True
         elif act.lower() == 'keluar':
             print("Dadah Mr. Admin")
@@ -156,15 +146,7 @@ def shop_management(folder_name: str) -> None:
     return
 
 
-def write_it_out(path: str, txt: str) -> None:
-    data: TextIO = open(path, 'w')
-    data.write(txt)
-    data.close()
-
-
-def concat(a1: List[str], a2: List[str]) -> List[List[str]]:
-    a1: List[List[str]] = to_list(a1)
-    a2: List[List[str]] = to_list(a2)
+def concat(a1: Matrix, a2: Matrix) -> Matrix:
     row: int = len(a1)
     col_a1: int = len(a1[0])
     col_a2: int = len(a2[0])
@@ -189,10 +171,10 @@ def concat(a1: List[str], a2: List[str]) -> List[List[str]]:
     return new_arr
 
 
-def add_id(data: List[List[str]]) -> List[List[str]]:
+def add_id(data: Matrix) -> Matrix:
     row: int = len(data)
     col: int = len(data[0])
-    arr: List[List[str]] = [["" for _ in range(col+1)] for _ in range(row)]
+    arr: Matrix = [["" for _ in range(col+1)] for _ in range(row)]
     for i in range(row):
         for j in range(col+1):
             if j == 0:
@@ -205,28 +187,24 @@ def add_id(data: List[List[str]]) -> List[List[str]]:
     return arr
 
 
-def write_without(path: str, idx: str, is_potion: bool = False) -> None:
-    data: List[str] = readlines(path)
-    data_2d: List[List[str]] = to_list(data)
-    data_to_write: TextIO = open(path, 'w')
-    txt_to_write: str = ""
+def write_without(user_data: Matrix, idx: str, is_potion: bool = False) -> None:
+    arr: Matrix = []
     if is_potion:
-        for i in range(len(data)):
+        for i in range(len(user_data)):
             if i != int(idx):
-                txt_to_write += data[i]
+                arr.append(user_data[i])
     else:
-        for i in range(len(data)):
-            if data_2d[i][0] != idx:
-                txt_to_write += data[i]
-    data_to_write.write(txt_to_write)
-    data_to_write.close()
+        for i in range(len(user_data)):
+            if user_data[i][0] != idx:
+                arr.append(user_data[i])
+    return arr
 
 
-def verification_hapus() -> bool:
+def verification_hapus(idx: str, user_data: Matrix) -> bool:
     is_hapus: str = ""
     while is_hapus.lower() not in ['y', 'n']:
         is_hapus: str = input(
-            ">>> Apakah anda yakin ingin menghapus %s dari shop (y/n)? ")
+            ">>> Apakah anda yakin ingin menghapus %s dari shop (y/n)? " % (user_data[is_in(user_data, idx, 0)][1]))
     if is_hapus.lower() == 'y':
         return True
     return False
@@ -234,7 +212,7 @@ def verification_hapus() -> bool:
 
 def get_stock() -> str:
     stock: str = input(">>> Masukkan stok baru: ")
-    while not (is_number(stock)):
+    while not (is_number(stock)) and len(stock) > 0:
         print("Masukkan input bertipe Integer nonnegatif, coba lagi!\n")
         stock = input(">>> Masukkan stok baru: ")
     return stock
@@ -242,20 +220,20 @@ def get_stock() -> str:
 
 def get_price() -> str:
     price: str = input(">>> Masukkan harga baru: ")
-    while not (is_number(price)):
+    while not (is_number(price)) and len(price) > 0:
         print("Masukkan input bertipe Integer nonnegatif, coba lagi!\n")
         price = input(">>> Masukkan harga baru: ")
     return price
 
 
-def is_in(arr: List[List[str]], e: str, idx: int) -> bool:
+def is_in(arr: Matrix, e: str, idx: int) -> bool:
     for i in range(len(arr)):
         if arr[i][idx] == e:
             return i
     return -1
 
 
-def get_idx(data: List[List[str]], txt: str) -> str:
+def get_idx(data: Matrix, txt: str) -> str:
     idx: str = input(">>> Masukkan id %s: " % (txt))
     while not (is_number(idx) and is_in(data, idx, 0) != -1):
         if not is_number(idx):
@@ -267,14 +245,10 @@ def get_idx(data: List[List[str]], txt: str) -> str:
     return idx
 
 
-def show(c: str, folder_name: str) -> None:
+def show(c: str, user_data: Mapping) -> None:
     if c == 'monster':
-        monster_shop: TextIO = readlines(
-            './data/%s/monster_shop.csv' % (folder_name))
-        monster: TextIO = readlines('./data/%s/monster.csv' % (folder_name))
-        monster_to_print: List[str] = concat(monster, monster_shop)
+        monster_to_print: Matrix = concat(
+            user_data["monster.csv"], user_data["monster_shop.csv"])
         table_print(monster_to_print)
     elif c == 'potion':
-        item_shop: TextIO = readlines(
-            './data/%s/item_shop.csv' % (folder_name))
-        table_print(add_id(to_list(item_shop)))
+        table_print(add_id(user_data["item_shop.csv"]))

@@ -1,8 +1,10 @@
-from typing import List, TextIO
+from typing import List, TextIO, Dict
 from .Splitter import splitter
+import os
 
+type Vector = List[List[str]]
 
-def table_print(data: List[List[str]]) -> None:
+def table_print(data: Vector) -> None:
     """
     Prosedur ini membutuhkan parameter list 2 dimensi yang nantinya 
     akan diproses menjadi sebuah tabel yang rapih dengan mengeluarkan 
@@ -66,3 +68,22 @@ def join(data: List[str]) -> str:
         if i != col-1:
             txt += ';'
     return txt
+
+def readlines(path: str) -> List[str]:
+    data: TextIO = open(path, 'r')
+    n: int = 0
+    for _ in data:
+        n += 1
+    data.close()
+    data: TextIO = open(path, 'r')
+    arr: List[str] = ["" for _ in range(n)]
+    idx: int = 0
+    for i in data:
+        arr[idx] = i
+        idx += 1
+    data.close()
+    return arr
+
+def read_all(user_data: Dict[str, Vector], folder_name: str) -> None:
+    for file_name in os.listdir("./data/%s" % (folder_name)):
+        user_data[file_name] = to_list(readlines("./data/%s/%s" % (folder_name, file_name)))

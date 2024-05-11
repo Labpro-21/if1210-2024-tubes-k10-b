@@ -1,22 +1,17 @@
-from typing import TextIO, List
+from typing import TextIO, List, Dict
 from .helper.Splitter import splitter
 from .helper.IsType import is_number
-from .helper.ListManipulation import table_print, to_list
-from .helper.Readline import readlines
+from .helper.ListManipulation import table_print, to_list, readlines
+
+type Matrix = List[List[str]]
+type Mapping = Dict[str, Matrix]
 
 
-def show(folder_name) -> None:
-    monster_data: TextIO = readlines('./data/%s/monster.csv' % (folder_name))
-    table_print(to_list(monster_data))
-
-
-def get_type(folder_name) -> str:
+def get_type(user_data: Mapping) -> str:
     def is_added(name) -> bool:
-        monster_data: TextIO = readlines('./data/%s/monster.csv' % (folder_name))
-        for data in monster_data:
-            row: List[str] = splitter(data)
+        monster_data: Matrix = user_data["monster.csv"]
+        for row in monster_data:
             if name == row[1]:
-                monster_data.close()
                 return True
         return False
 
@@ -65,19 +60,18 @@ def get_hp() -> str:
     return hp
 
 
-def get_last_id(folder_name) -> int:
-    monster_data: TextIO = readlines('./data/%s/monster.csv' % (folder_name))
-    data: List[str] = monster_data
+def get_last_id(user_data: Mapping) -> int:
+    data: Matrix = user_data["monster.csv"]
     last_id: int = data[len(data)-1][0]
     return int(last_id)
 
 
-def add_monster() -> None:
+def add_monster(user_data: Mapping) -> None:
     print("Memulai pembuatan monster baru")
     print()
 
-    idn: int = get_last_id()
-    name: str = get_type()
+    idn: int = get_last_id(user_data)
+    name: str = get_type(user_data)
     atk_power: str = get_atk_power()
     def_power: str = get_def_power()
     hp: str = get_hp()
@@ -92,21 +86,18 @@ def add_monster() -> None:
     while choice.upper() != 'Y' and choice.upper() != 'N':
         choice: str = input("Tambahkan Monster ke database (Y/N): ")
     if choice.upper() == 'Y':
-        monster_data: TextIO = open('./data/monster.csv', 'a')
-        monster_data.write("%s;%s;%s;%s;%s\n" %
-                           (idn+1, name, atk_power, def_power, hp))
-        monster_data.close()
+        user_data["monster.csv"].append([str(idn+1), name, atk_power, def_power, hp])
         print("Monster baru telah ditambahkan!")
 
 
-def monster_management(folder_name: str) -> None:
+def monster_management(user_data: Mapping) -> None:
     print("SELAMAT DATANG DI DATABASE PARA MONSTER!!!")
     print("1. Tampilkan semua Monster")
     print("2. Tambah Monster baru")
     choice = input(">>> Pilih aksi: ")
     if choice == '1':
-        show(folder_name)
+        table_print(user_data["monster.csv"])
     elif choice == '2':
-        add_monster()
+        add_monster(user_data)
     else:
-        monster_management(folder_name)
+        monster_management(user_data)

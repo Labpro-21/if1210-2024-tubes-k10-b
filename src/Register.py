@@ -1,5 +1,9 @@
 from .helper.Splitter import splitter
-from typing import TextIO, List
+from typing import TextIO, List, Dict
+from .helper.ListManipulation import to_list, readlines
+
+type Matrix = List[List[str]]
+type Mapping = Dict[str, Matrix]
 
 
 def is_valid(s: str) -> bool:
@@ -12,7 +16,7 @@ def is_valid(s: str) -> bool:
     return True
 
 
-def verification(user: str, folder_name: str) -> bool:
+def verification(user: str, user_data: Matrix) -> bool:
     '''
     0: username is not valid
     1: username is not available
@@ -20,63 +24,45 @@ def verification(user: str, folder_name: str) -> bool:
     '''
     if not is_valid(user):
         return 0
-    user_data: TextIO = open('./data/%s/user.csv' % (folder_name), 'r')
-    for i in user_data.readlines():
-        data: List[str] = splitter(i)
+    for data in user_data:
         if data[1] == user:
-            user_data.close()
             return 1
-    user_data.close()
     return 2
 
 
-def pick_monster(user_id: int, user: str, folder_name: str) -> None:
-    monster_data: TextIO = open('./data/%s/monster.csv' % (folder_name), 'r')
-    data: List[str] = monster_data.readlines()
+def pick_monster(user_id: int, user: str, user_data: Mapping) -> None:
+    data: Matrix = user_data["monster.csv"]
     n: int = len(data)
     print('\nSilakan pilih salah satu monster sebagai monster awalmu.')
     for i in range(1, n):
-        splitted_data: List[str] = splitter(data[i])
-        print("%s. %s" % (splitted_data[0], splitted_data[1]))
-    monster_data.close()
+        print("%s. %s" % (data[i][0], data[i][1]))
 
-    is_id_valid: bool = False
-    while not is_id_valid:
+    while True:
         monster_id: str = input("\nID monster pilihanmu: ")
         for i in range(1, n):
-            splitted_data: List[str] = splitter(data[i])
-            if splitted_data[0] == monster_id:
-                monster_inventory_data: TextIO = open(
-                    './data/%s/monster_inventory.csv' % (folder_name), 'a')
-                monster_inventory_data.write(
-                    "%d;%s;%d\n" % (user_id, monster_id, 1))
-                monster_inventory_data.close()
+            if data[i][0] == monster_id:
+                user_data["monster_inventory.csv"].append([str(user_id), monster_id, "1"])
                 print('\nSelamat datang Agent %s. Mari kita mengalahkan Dr. Asep Spakbor dengan %s!' % (
-                    user, splitted_data[1]))
+                    user, data[i][1]))
                 return
         print('ID monster tidak ditemukan, silakan ulangi!')
 
 
-def add_user(user: str, pw: str, folder_name: str) -> None:
-    user_data: TextIO = open('./data/%s/user.csv' % (folder_name), 'r')
-    data: List[str] = user_data.readlines()
+def add_user(user: str, pw: str, user_data: Mapping) -> None:
+    data: Matrix = user_data["user.csv"]
     last_id: int = int(data[len(data)-1][0])
-    user_data.close()
-
-    user_data: TextIO = open('./data/%s/user.csv' % (folder_name), 'a')
-    user_data.write("%d;%s;%s;%s;%d\n" % (last_id+1, user, pw, "Agent", 0))
-    user_data.close()
-
-    pick_monster(last_id+1, user, folder_name)
+    user_data["user.csv"].append([str(last_id+1), user, pw, "Agent", "0"])
+    
+    pick_monster(last_id+1, user, user_data)
 
 
-def regist(folder_name: str) -> None:
+def regist(user_data: Matrix) -> None:
     user: str = input("Masukan username: ")
     pw: str = input("Masukan password: ")
-    verif: int = verification(user, folder_name)
+    verif: int = verification(user, user_data["user.csv"])
     if verif == 0:
         print('Username hanya boleh berisi alfabet, angka, underscore, dan strip!')
     elif verif == 1:
         print('Username %s sudah terpakai, silahkan gunakan username lain!' % (user))
     elif verif == 2:
-        add_user(user, pw, folder_name)
+        add_user(user, pw, user_data)

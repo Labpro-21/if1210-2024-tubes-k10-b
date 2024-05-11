@@ -7,11 +7,11 @@ type Matrix = List[List[str]]
 type Mapping = Dict[str, Matrix]
 
 
-def lihat(folder_name):
+def lihat(user_data: Mapping):
     breaked: bool = False
     while not breaked:
         c: str = input(">>> Mau lihat apa? (monster/potion): ")
-        show(c, folder_name)
+        show(c, user_data)
         if c in ['monster', 'potion']:
             breaked: bool = True
 
@@ -24,6 +24,7 @@ def tambah(user_data: Mapping) -> None:
             breaked = True
     if c == 'monster':
         contoh: Matrix = [["ID", "Type", "ATK Power", "DEF Power", "HP"],
+                          
                           ["4", "Cici", "10", "1000", "200"],
                           ["5", "Moskov", "20", "1000", "200"],
                           ["6", "Selena", "30", "430", "100"]]
@@ -41,7 +42,7 @@ def tambah(user_data: Mapping) -> None:
         user_data["monster_shop.csv"].append([arr[idn][0], stock, price])
     elif c == 'potion':
         contoh: Matrix = [["ID", "Type"],
-                          ["3", "Healing Potion"]]
+                          ["3", "healing"]]
         arr = []
         potion = user_data["item_shop.csv"]
         for i in contoh:

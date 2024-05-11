@@ -1,30 +1,27 @@
-from .helper.ListManipulation import to_list
-from .helper.Readline import readlines
+from .helper.ListManipulation import to_list, readlines
 from .helper.IsType import is_number
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
-type Vector = List[List[str]]
+type Matrix = List[List[str]]
+type Mapping = Dict[str, Matrix]
 
-def get_item_data(idn: str, folder_name: str) -> Vector:
-    item: Vector = to_list(readlines('./data/%s/item_inventory.csv' % (folder_name)))
+def get_item_data(idn: str, user_data: str) -> Matrix:
     arr = []
-    for i in item:
+    for i in user_data:
         if i[0] == idn:
             arr.append(i)
     return arr
 
 
-def get_monster_data(idn: str, folder_name: str) -> Vector:
-    monster: Vector = to_list(
-        readlines('./data/%s/monster_inventory.csv' % (folder_name)))
+def get_monster_data(idn: str, user_data: Matrix) -> Matrix:
     arr = []
-    for i in monster:
+    for i in user_data:
         if i[0] == idn:
             arr.append(i)
     return arr
 
 
-def concat_monster(a1: Vector, a2: Vector) -> None:
+def concat_monster(a1: Matrix, a2: Matrix) -> None:
     for i in range(len(a1)):
         for j in a2:
             if a1[i][1] == j[0]:
@@ -32,7 +29,7 @@ def concat_monster(a1: Vector, a2: Vector) -> None:
                     a1[i].append(j[k])
 
 
-def concat_monster_item(a1: Vector, a2: Vector) -> List[Tuple[str, List[str]]]:
+def concat_monster_item(a1: Matrix, a2: Matrix) -> List[Tuple[str, List[str]]]:
     arr = []
     for i in a1:
         arr.append(('monster', i))
@@ -41,15 +38,15 @@ def concat_monster_item(a1: Vector, a2: Vector) -> List[Tuple[str, List[str]]]:
     return arr
 
 
-def inventory(data: List[str], folder_name: str) -> None:
+def inventory(data: List[str], user_data: Mapping) -> None:
     print("============ INVENTORY LIST (User ID: %s) ============" % (data[0]))
     print("Jumlah O.W.C.A. Coin-mu sekarang %s." % (data[4]))
-    monster_inv: Vector = get_monster_data(data[0], folder_name)
-    monster: Vector = to_list(readlines('./data/%s/monster.csv' % (folder_name)))
+    monster_inv: Matrix = get_monster_data(data[0], user_data["monster_inventory.csv"])
+    monster: Matrix = user_data["monster.csv"]
     concat_monster(monster_inv, monster)
-    item_inv: Vector = get_item_data(data[0], folder_name)
+    item_inv: Matrix = get_item_data(data[0], user_data["item_inventory.csv"])
     num: int = 1
-    all_data: Vector = concat_monster_item(monster_inv, item_inv)
+    all_data: Matrix = concat_monster_item(monster_inv, item_inv)
     for inv in monster_inv:
         print("%s. Monster\t(Name: %s, Lvl: %s, HP: %s)" %
               (num, inv[3], inv[2], inv[6]))

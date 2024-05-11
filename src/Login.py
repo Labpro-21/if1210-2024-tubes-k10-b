@@ -4,15 +4,19 @@ from .helper.ListManipulation import to_list, readlines
 
 type Matrix = List[List[str]]
 
+
 def verification(user: str, password: str, user_data: Matrix) -> Tuple[List[str], int]:
     for row in user_data:
         if user == row[1] and password == row[2]:
+            arr: List[str] = []
+            for i in row:
+                arr.append(i)
             print("You are logged in as", end=" ")
             if "Admin" == row[3]:
                 print('Admin!')
-                return (row, 0)
+                return (arr, 0)
             print('Agent!')
-            return (row, 1)
+            return (arr, 1)
         elif user == row[1] and password != row[2]:
             print('Wrong password, try again!')
             return ([], 1)

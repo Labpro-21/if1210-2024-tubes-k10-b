@@ -1,9 +1,10 @@
 from src.Save import save
-from typing import List
+from typing import List, Dict
 
-type Vector = List[List[str]]
+type Matrix = List[List[str]]
+type Mapping = Dict[str, Matrix]
 
-def leave(data: Vector) -> None:
+def leave(data: Mapping) -> None:
     choice = input(
         'Apakah Anda mau melakukan penyimpanan file yang sudah diubah? (y/n) ')
     if choice.lower() == 'y':

@@ -1,12 +1,10 @@
 from typing import TextIO, List, Tuple
 from .helper.Splitter import splitter
-from .helper.ListManipulation import to_list
-from .helper.Readline import readlines
+from .helper.ListManipulation import to_list, readlines
 
+type Matrix = List[List[str]]
 
-def verification(user: str, password: str, folder_name: str) -> Tuple[List[str], int]:
-    user_data: TextIO = to_list(
-        readlines('./data/%s/user.csv' % (folder_name)))
+def verification(user: str, password: str, user_data: Matrix) -> Tuple[List[str], int]:
     for row in user_data:
         if user == row[1] and password == row[2]:
             print("You are logged in as", end=" ")
@@ -23,7 +21,7 @@ def verification(user: str, password: str, folder_name: str) -> Tuple[List[str],
     return ([], 3)
 
 
-def login(folder_name: str) -> int:
+def login(user_data: Matrix) -> int:
     '''
     0: admin
     1: verified user (non-admin)
@@ -33,4 +31,4 @@ def login(folder_name: str) -> int:
     user: str = input('Masukkan username Anda: ')
     password: str = input('Masukkan password Anda: ')
 
-    return verification(user, password, folder_name)
+    return verification(user, password, user_data)

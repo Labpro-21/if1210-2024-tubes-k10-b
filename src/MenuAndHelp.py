@@ -17,6 +17,7 @@ import os
 type Matrix = List[List[str]]
 type Mapping = Dict[str, Matrix]
 
+
 def menu(folder_name: str) -> None:
     is_login: bool = False
     is_exit: bool = False
@@ -63,14 +64,15 @@ def menu(folder_name: str) -> None:
                 shop_and_currency(user_data, user_login)
         elif choice == "LABORATORY" and is_login and not is_admin:
             laboratory(user_login, user_data)
-        elif choice == "BATTLE":
+        elif choice == "BATTLE" and is_login and not is_admin:
             battle(user_data)
         elif choice == "LOGOUT":
             logout(is_login)
             if is_login:
                 is_login = False
+                is_admin = False
         elif choice == "EXIT":
             is_exit = True
             leave(user_data)
-        elif choice == "ARENA":
+        elif choice == "ARENA" and is_login and not is_admin:
             arena(user_data)

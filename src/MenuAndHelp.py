@@ -59,7 +59,7 @@ def menu(folder_name: str) -> None:
         elif choice == "SHOP":
             if is_admin:
                 shop_management(user_data)
-            if is_login:
+            elif is_login:
                 shop_and_currency(user_data, user_login)
         elif choice == "LABORATORY" and is_login and not is_admin:
             laboratory(user_login, user_data)

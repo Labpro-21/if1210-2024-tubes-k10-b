@@ -2,7 +2,7 @@ from typing import List, TextIO, Dict
 from .Splitter import splitter
 import os
 
-type Vector = List[List[str]]
+Vector = List[List[str]]
 
 def table_print(data: Vector) -> None:
     """

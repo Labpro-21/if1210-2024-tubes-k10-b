@@ -1,6 +1,6 @@
 from typing import List, TextIO, Tuple
 
-type Matrix = List[List[str]]
+Matrix = List[List[str]]
 
 
 def get_peta(folder_name: str) -> Tuple[int, int, Matrix]:

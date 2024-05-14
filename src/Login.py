@@ -2,7 +2,7 @@ from typing import TextIO, List, Tuple
 from .helper.Splitter import splitter
 from .helper.ListManipulation import to_list, readlines
 
-type Matrix = List[List[str]]
+Matrix = List[List[str]]
 
 
 def verification(user: str, password: str, user_data: Matrix) -> Tuple[List[str], int]:

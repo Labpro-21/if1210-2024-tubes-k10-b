@@ -2,8 +2,8 @@ from .helper.ListManipulation import to_list, readlines
 from .helper.IsType import is_number
 from typing import List, Tuple, Dict
 
-type Matrix = List[List[str]]
-type Mapping = Dict[str, Matrix]
+Matrix = List[List[str]]
+Mapping = Dict[str, Matrix]
 
 def get_item_data(idn: str, user_data: str) -> Matrix:
     arr = []

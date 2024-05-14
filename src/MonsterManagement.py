@@ -3,8 +3,8 @@ from .helper.Splitter import splitter
 from .helper.IsType import is_number
 from .helper.ListManipulation import table_print, to_list, readlines
 
-type Matrix = List[List[str]]
-type Mapping = Dict[str, Matrix]
+Matrix = List[List[str]]
+Mapping = Dict[str, Matrix]
 
 
 def get_type(user_data: Mapping) -> str:

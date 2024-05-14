@@ -1,8 +1,8 @@
 from src.Save import save
 from typing import List, Dict
 
-type Matrix = List[List[str]]
-type Mapping = Dict[str, Matrix]
+Matrix = List[List[str]]
+Mapping = Dict[str, Matrix]
 
 def leave(data: Mapping) -> None:
     choice = input(

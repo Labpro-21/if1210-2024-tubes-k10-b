@@ -2,8 +2,8 @@ from .helper.Splitter import splitter
 from typing import TextIO, List, Dict
 from .helper.ListManipulation import to_list, readlines
 
-type Matrix = List[List[str]]
-type Mapping = Dict[str, Matrix]
+Matrix = List[List[str]]
+Mapping = Dict[str, Matrix]
 
 
 def is_valid(s: str) -> bool:

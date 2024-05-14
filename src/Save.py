@@ -4,8 +4,8 @@ import sys
 from typing import List, Dict, TextIO
 from .helper.ListManipulation import join
 
-type Matrix = List[List[str]]
-type Mapping = Dict[str, Matrix]
+Matrix = List[List[str]]
+Mapping = Dict[str, Matrix]
 
 
 def pprint(folder_name: str, c: int = 2) -> None:

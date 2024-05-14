@@ -9,13 +9,13 @@ from src.Exit import leave
 from src.Battle import battle
 from src.ShopAndCurrency import shop_and_currency
 from src.Laboratory import laboratory
-from src.Arena import arena
+# from src.Arena import arena
 from typing import List, Dict
 from .helper.ListManipulation import read_all
 import os
 
-type Matrix = List[List[str]]
-type Mapping = Dict[str, Matrix]
+Matrix = List[List[str]]
+Mapping = Dict[str, Matrix]
 
 
 def menu(folder_name: str) -> None:
@@ -74,5 +74,5 @@ def menu(folder_name: str) -> None:
         elif choice == "EXIT":
             is_exit = True
             leave(user_data)
-        elif choice == "ARENA" and is_login and not is_admin:
-            arena(user_data)
+        # elif choice == "ARENA" and is_login and not is_admin:
+            # arena(user_data)

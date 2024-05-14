@@ -3,8 +3,8 @@ from .helper.Splitter import splitter
 from .helper.ListManipulation import table_print, to_list, join, readlines
 from .helper.IsType import is_number
 
-type Matrix = List[List[str]]
-type Mapping = Dict[str, Matrix]
+Matrix = List[List[str]]
+Mapping = Dict[str, Matrix]
 
 
 def lihat(user_data: Mapping):
@@ -65,7 +65,7 @@ def ubah(user_data: Mapping) -> None:
         if c in ['monster', 'potion']:
             breaked = True
     if c == 'monster':
-        monster_shop: List[str] = user_data["monster_shop.csv"]
+        monster_shop: Matrix = user_data["monster_shop.csv"]
         monster_list: Matrix = concat(
             user_data["monster.csv"], user_data["monster_shop.csv"])
         idx: str = get_idx(monster_list, 'monster')

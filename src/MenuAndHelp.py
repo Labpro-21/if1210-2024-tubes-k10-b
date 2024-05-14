@@ -9,6 +9,7 @@ from src.Exit import leave
 from src.Battle import battle
 from src.ShopAndCurrency import shop_and_currency
 from src.Laboratory import laboratory
+from src.Save import save
 # from src.Arena import arena
 from typing import List, Dict
 from .helper.ListManipulation import read_all
@@ -76,3 +77,5 @@ def menu(folder_name: str) -> None:
             leave(user_data)
         # elif choice == "ARENA" and is_login and not is_admin:
             # arena(user_data)
+        elif choice == "SAVE":
+            save(user_data)

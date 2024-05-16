@@ -4,6 +4,7 @@ from src.Monster import stats_Monster,attack_monster_b,def_monster_b,attack_mons
 from src.Potion import potion
 from src.AsciiArt import ascii_battle
 from typing import TextIO, List, Dict
+from .helper.IsType import is_number
 import sys, time
 Matrix = List[List[str]]
 Mapping = Dict[str, Matrix]
@@ -54,7 +55,11 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
         pilih=True
         while (pilih):
             delay_print("Pilih monster untuk bertarung: ")
-            monster_p=int(input(""))
+            monster_p=(input(""))
+            while not is_number(monster_p):
+                delay_print("Masukkan harus bertipe Integer, coba lagi!")
+                monster_p=(input(""))
+            monster_p=int(monster_p)
             if (monster_p>j-1):
                 delay_print("Pilihan nomor tidak tersedia!\n")
             else:
@@ -111,16 +116,16 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
             delay_print("1. Attack")
             delay_print("2. Use Potion")
             delay_print("3. Quit")
-            pilihan=int(input("Pilhan Perintah: "))
+            pilihan=input("Pilhan Perintah: ")
             time.sleep(1)
             print ("")
-            if (pilihan==3):
+            if (pilihan=="3"):
                 if (n>=1):
                     arena(data,user_data,2,n,dmg_taken,dmg_given,player,power_p,def_p,hp_ori,lvl_p)
                 else:
                     delay_print("Anda berhasil kabur dari BATTLE!")
                 match=False
-            elif(pilihan == 1):
+            elif(pilihan == "1"):
                 ascii_battle(monster_p)
                 delay_print(f"SCHWINKKK, {player} menyerang {nama_m} \n")
                 att=attack_monster_b(power_p)
@@ -150,7 +155,7 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
                         data[4]=str(int(data[4])+oc)
                     match=False
                 turn+=1
-            elif (pilihan == 2):
+            elif (pilihan == "2"):
                 ada_potion=False
                 list_potion=[0 for i in range (4)]
                 letak_potion=[0 for i in range (4)]
@@ -233,4 +238,6 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
                                 potions=False
                         elif (pilihan_p==4):
                             potions=False
+            else:
+                delay_print("Pilihan Anda tidak valid! \n")
             time.sleep(0.2)

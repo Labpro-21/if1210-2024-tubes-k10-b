@@ -10,7 +10,7 @@ from src.Battle import battle
 from src.ShopAndCurrency import shop_and_currency
 from src.Laboratory import laboratory
 from src.Save import save
-# from src.Arena import arena
+from src.Arena import arena
 from typing import List, Dict
 from .helper.ListManipulation import read_all
 import os
@@ -66,7 +66,7 @@ def menu(folder_name: str) -> None:
         elif choice == "LABORATORY" and is_login and not is_admin:
             laboratory(user_login, user_data)
         elif choice == "BATTLE" and is_login and not is_admin:
-            battle(user_data)
+            battle(user_login ,user_data ,0,"null",0,0,0,0,0,0)
         elif choice == "LOGOUT":
             logout(is_login)
             if is_login:
@@ -74,8 +74,8 @@ def menu(folder_name: str) -> None:
                 is_admin = False
         elif choice == "EXIT":
             is_exit = True
-            leave(user_data)
-        # elif choice == "ARENA" and is_login and not is_admin:
-            # arena(user_data)
+            leave(user_login,user_data,1)
+        elif choice == "ARENA" and is_login and not is_admin:
+            arena(user_login,user_data,1,1,0,0,"null",0,0,0,0)
         elif choice == "SAVE":
             save(user_data)

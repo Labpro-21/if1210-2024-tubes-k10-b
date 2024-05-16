@@ -1,9 +1,21 @@
-def arena (x=1/0,n=stage,dmg_taken,dmg_given):
-    alive=True
-    n=int(0)
+from typing import TextIO, List, Dict
+Matrix = List[List[str]]
+Mapping = Dict[str, Matrix]
+import sys,time
+
+def delay_print(s, t=0.015):
+    for i in s:
+        print(i,end="")
+        sys.stdout.flush()
+        time.sleep(t)
+    print("")
+
+def arena (data:List[str], user_data: Mapping, x:int , n:int, dmg_taken:int ,dmg_given:int,monster:str,power:int,defend:int,hp:int,lvl_p):
+    # x = 1 menunjukkan player belum kalah
+    # x = 0 menunjukkan player sudah kalah
+    # x = 2 menunjukkan player mengakhiri arena
+    # n menunjuukan stage
     reward = int(0)
-    dmg_taken=int(0)
-    dmg_given=int(0)
     if (n>1):
         if (n==2):
             reward= 30
@@ -15,20 +27,25 @@ def arena (x=1/0,n=stage,dmg_taken,dmg_given):
             reward = 150
         elif (n==6):
             reward = 200
-        print (f"STAGE CLEARED! Anda akan mendapatkan {reward} OC pada sesi ini !")
+        if(x==1):
+            delay_print (f"STAGE CLEARED! Anda akan mendapatkan {reward} OC pada sesi ini !")
+    from src.Battle import battle
     if (x==1) and (n<=5):
-        n+=1
-        battle(n)
+        battle(data,user_data,n,monster,power,defend,hp,dmg_given,dmg_taken,lvl_p)
     else:
         if (x==2):
-            print ("GAME OVER! Anda mengakhiri sesi latihan!")
-        if (n<=6):
-            print(f"GAME OVER! Sesi latihan berakhir pada stage {n-1} ")
+            delay_print ("GAME OVER! Anda mengakhiri sesi latihan!")
         else:
-            print (f"Selamat! Anda berhasil menyelesaikan seluruh stage Arena !!!")
-        print ("============ STATS ============")
-        print (f"Total hadiah    :{reward}")
-        print (f"Jumlah stage    : {n-1}")
-        print (f"Damage diberikan: {dmg_given}")
-        print (f"Damage diterima : {dmg_taken}")
+            if (n<=6):
+                delay_print(f"GAME OVER! Sesi latihan berakhir pada stage {n-1} ")
+            else:
+                delay_print (f"Selamat! Anda berhasil menyelesaikan seluruh stage Arena !!!")
+        delay_print ("============ STATS ============")
+        delay_print (f"Total hadiah    : {reward}")
+        delay_print (f"Jumlah stage    : {n-1}")
+        delay_print (f"Damage diberikan: {dmg_given}")
+        delay_print (f"Damage diterima : {dmg_taken}")
+        data[4]=str(int(data[4])+reward)
+    # return
+
 

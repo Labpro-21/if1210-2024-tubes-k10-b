@@ -74,7 +74,7 @@ def menu(folder_name: str) -> None:
                 is_admin = False
         elif choice == "EXIT":
             is_exit = True
-            leave(user_login,user_data,1)
+            leave(user_data)
         elif choice == "ARENA" and is_login and not is_admin:
             arena(user_login,user_data,1,1,0,0,"null",0,0,0,0)
         elif choice == "SAVE":

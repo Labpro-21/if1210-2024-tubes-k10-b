@@ -2,6 +2,7 @@ from src.RandomNumberGenerator import random_number_generator
 from src.Arena import arena
 from src.Monster import stats_Monster,attack_monster_b,def_monster_b,attack_monster_c,def_monster_c
 from src.Potion import potion
+from src.AsciiArt import ascii_battle
 from typing import TextIO, List, Dict
 import sys, time
 Matrix = List[List[str]]
@@ -17,7 +18,7 @@ def delay_print(s, t=0.015):
 def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p,dmg_given,dmg_taken,lvl_p):
     jlh_monster=len(user_data["monster.csv"])
     monster=random_number_generator(1,jlh_monster-1,int(time.time())+random_number_generator(1,100))
-    print("*GAMBAR MONSTER*")
+    ascii_battle(monster)
     print("")
     delay_print(f"RAWRRR, Monster {user_data['monster.csv'][monster][1]} telah muncul !!! \n")
     lvl_m=random_number_generator(1,4,int(time.time())+random_number_generator(1,100))
@@ -58,7 +59,7 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
                 delay_print("Pilihan nomor tidak tersedia!\n")
             else:
                 pilih=False
-                print("GAMBAR MONSTER")
+                ascii_battle(monster_p)
                 lvl_p=list_lvl[monster_p]
                 power_p=stats_Monster(lvl_p,list_power[monster_p])
                 def_p=stats_Monster(lvl_p,list_def[monster_p])
@@ -75,7 +76,7 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
     pernah3=0
     while(match):
         if (turn%2==0):
-            #Gambar monster
+            ascii_battle(monster)
             delay_print(f"============ TURN {turn} ({nama_m})============\n")
             att=attack_monster_c(power_m)
             serangan=def_monster_c(def_p,att)
@@ -120,7 +121,7 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
                     delay_print("Anda berhasil kabur dari BATTLE!")
                 match=False
             elif(pilihan == 1):
-                print("GAMBAR MONSTER \n")
+                ascii_battle(monster_p)
                 delay_print(f"SCHWINKKK, {player} menyerang {nama_m} \n")
                 att=attack_monster_b(power_p)
                 serangan=def_monster_b(def_m,att)

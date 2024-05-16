@@ -1,4 +1,4 @@
-def ascii_battle1():
+def ascii_battle(n=int):
     art1 = """
  -+--+.                                     .+--+- 
 +-    .+.         ..-+++++++++-..         .+.    -+
@@ -17,10 +17,6 @@ def ascii_battle1():
               .+ .+-           -+. +.              
                ++-               -++                  
     """
-    print(art1)
-ascii_battle1()
-
-def ascii_battle2():
     art2= """                                          
                                   +##+             
             -###.                 +##+             
@@ -47,10 +43,7 @@ def ascii_battle2():
           +##-    -##+    .###.     +###-          
           .-.     -#+      +##.       .-                                                                         
           """
-    print(art2)
-ascii_battle2()
 
-def ascii_battle3():
     art3= """
            -+###+.               .+####-           
           -#- ..+#.             .#+.. -#+          
@@ -79,10 +72,7 @@ def ascii_battle3():
       .##########.               .##########.      
       -+########+-               -+########+-      
         """                       
-    print(art3)                      
-ascii_battle3()
 
-def ascii_battle4():
     art4 = """                                              
                     ########                     
                ##################                
@@ -108,11 +98,7 @@ def ascii_battle4():
           ####   ###   ###   ###   ###           
            ###########################           
            ###########################                                                        
-"""        
-    print(art4)  
-ascii_battle4()   
-
-def ascii_battle5():
+"""          
     art5= """                                      
                ######        #####               
               #  ##  #     #  ##  #              
@@ -136,10 +122,7 @@ def ascii_battle5():
                 #      ###      #                
                  ##  ##   ##  ##                                                                  
 """
-    print(art5)
-ascii_battle5()
 
-def ascii_battle6():
     art6= """
         #######                #######         
         ## ###  ##              ## #### ##       
@@ -164,5 +147,15 @@ def ascii_battle6():
     ##        #                   ##       ##    
       ########                      #######  
 """
-    print(art6)
-ascii_battle6()
+    if (n==1):
+        print (art1)
+    elif (n==2):
+        print (art2)
+    elif (n==3):
+        print (art3)
+    elif (n==4):
+        print (art4)
+    elif (n==5):
+        print (art5)
+    elif (n==6):
+        print (art6)

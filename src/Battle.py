@@ -54,7 +54,6 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
                 power_p=stats_Monster(lvl_p,list_power[monster_p])
                 def_p=stats_Monster(lvl_p,list_def[monster_p])
                 hp_ori=stats_Monster(lvl_p,list_hp[monster_p])
-                hp_ori=1 #ganti
                 hp_p=hp_ori
                 player=list_nama[monster_p]
                 delay_print(f"RAWRRR, AGENT {data[1]} mengeluarkan monster {player}\n")

@@ -2,9 +2,10 @@ from typing import List, TextIO, Dict
 from .Splitter import splitter
 import os
 
-Vector = List[List[str]]
+Matrix = List[List[str]]
 
-def table_print(data: Vector) -> None:
+
+def table_print(data: Matrix) -> None:
     """
     Prosedur ini membutuhkan parameter list 2 dimensi yang nantinya 
     akan diproses menjadi sebuah tabel yang rapih dengan mengeluarkan 
@@ -60,14 +61,16 @@ def bubble_sort(data: List[str]) -> None:
             if data[j] > data[j+1]:
                 data[j], data[j+1] = data[j+1], data[j]
 
+
 def join(data: List[str]) -> str:
     txt: str = ""
     col: int = len(data)
     for i in range(col):
-        txt += data[i]
+        txt += str(data[i])
         if i != col-1:
             txt += ';'
     return txt
+
 
 def readlines(path: str) -> List[str]:
     data: TextIO = open(path, 'r')
@@ -84,6 +87,8 @@ def readlines(path: str) -> List[str]:
     data.close()
     return arr
 
-def read_all(user_data: Dict[str, Vector], folder_name: str) -> None:
+
+def read_all(user_data: Dict[str, Matrix], folder_name: str) -> None:
     for file_name in os.listdir("./data/%s" % (folder_name)):
-        user_data[file_name] = to_list(readlines("./data/%s/%s" % (folder_name, file_name)))
+        user_data[file_name] = to_list(
+            readlines("./data/%s/%s" % (folder_name, file_name)))

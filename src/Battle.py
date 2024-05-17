@@ -16,7 +16,56 @@ def delay_print(s, t=0.015):
         time.sleep(t)
     print("")
       
-def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p,dmg_given,dmg_taken,lvl_p):
+def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p,dmg_given,dmg_taken,lvl_p,monster_p):
+    if (n==1):
+        delay_print("Selamat datang di Arena\n")
+        delay_print("============ MONSTER LIST ============\n")
+        j=int(1)
+        list_lvl=[0 for i in range (1)]
+        list_power=[0 for i in range (1)]
+        list_def=[0 for i in range (1)]
+        list_hp=[0 for i in range (1)]
+        list_nama=[''for i in range (1)]
+        for i in range (0,len(user_data["monster_inventory.csv"])):
+            if (user_data["monster_inventory.csv"][i][0]==data[0]):
+                indeks=int(user_data["monster_inventory.csv"][i][1])+1
+                delay_print(f"{j}. {user_data['monster.csv'][indeks][1]}")
+                j+=1
+                list_lvl.append(int(user_data["monster_inventory.csv"][i][2]))
+                list_power.append(int(user_data["monster.csv"][indeks][2]))
+                list_def.append(int(user_data["monster.csv"][indeks][3]))
+                list_hp.append(int(user_data["monster.csv"][indeks][4]))
+                list_nama.append(user_data['monster.csv'][indeks][1])
+
+        pilih=True
+        while (pilih):
+            delay_print("Pilih monster untuk bertarung: ")
+            monster_p=(input(""))
+            while not is_number(monster_p):
+                delay_print("Masukkan harus bertipe Integer, coba lagi!")
+                monster_p=(input(""))
+            monster_p=int(monster_p)
+            if (monster_p>j-1):
+                delay_print("Pilihan nomor tidak tersedia!\n")
+            else:
+                pilih=False
+                ascii_battle(monster_p)
+                lvl_p=list_lvl[monster_p]
+                power_p=stats_Monster(lvl_p,list_power[monster_p])
+                def_p=stats_Monster(lvl_p,list_def[monster_p])
+                hp_ori=stats_Monster(lvl_p,list_hp[monster_p])
+                hp_ori=1 #ganti
+                hp_p=hp_ori
+                player=list_nama[monster_p]
+                delay_print(f"RAWRRR, AGENT {data[1]} mengeluarkan monster {player}\n")
+                delay_print (f"Name       : {player}")
+                delay_print (f"ATK Power  : {power_p}")
+                delay_print (f"DEF Power  : {def_p}")
+                delay_print (f"HP         : {hp_p}")
+                delay_print (f"Level      : {lvl_p}\n")
+        
+    if (n!=0):
+        print(f"=================== STAGE {n} ===================\n")
     jlh_monster=len(user_data["monster.csv"])
     monster=random_number_generator(1,jlh_monster-1,int(time.time())+random_number_generator(1,100))
     ascii_battle(monster)
@@ -33,7 +82,7 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
     delay_print (f"HP         : {hp_m}")
     delay_print (f"Level      : {lvl_m}\n")
 
-    if (n<=1):
+    if (n==0):
         delay_print("============ MONSTER LIST ============\n")
         j=int(1)
         list_lvl=[0 for i in range (1)]
@@ -71,9 +120,14 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
                 hp_ori=stats_Monster(lvl_p,list_hp[monster_p])
                 hp_p=hp_ori
                 player=list_nama[monster_p]
+                delay_print(f"RAWRRR, AGENT {data[1]} mengeluarkan monster {player}\n")
+                delay_print (f"Name       : {player}")
+                delay_print (f"ATK Power  : {power_p}")
+                delay_print (f"DEF Power  : {def_p}")
+                delay_print (f"HP         : {hp_p}")
+                delay_print (f"Level      : {lvl_p}\n")
     else:
         hp_ori=hp_p
-        print(f"\n============ STAGE {n} ============\n")
     match=True
     turn=1
     pernah1=0
@@ -90,7 +144,6 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
             if (hp_p<0):
                 dmg_taken+=hp_p
                 hp_p=0
-            print ("GAMBAR MONSTER \n")
             delay_print (f"SCHWINKKK, {nama_m} menyerang {player}\n")
             delay_print ("DETAIL SERANGAN:")
             delay_print (f"{nama_m} mencoba untuk menyerang {player} dengan power sebesar {att} ({int(float((att-power_m)/power_m*100))}%)")
@@ -106,13 +159,15 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
             turn+=1
             if (hp_p==0):
                 if (n>=1):
-                    arena(data,user_data,0,n,dmg_taken,dmg_given,player,power_p,def_p,hp_ori,lvl_p)
+                    arena(data,user_data,0,n,dmg_taken,dmg_given,player,power_p,def_p,hp_ori,lvl_p,monster_p)
                 else:
                     delay_print (f"Yahhh, Anda dikalahkan monster {nama_m}. Jangan menyerah, coba lagi !!!")
                 match=False
             time.sleep(0.2)
         else:
-            print(f"============ TURN {turn} ({player})============")
+            if(n!=0)or(n==0 and turn!=1):
+                ascii_battle(monster_p)
+            print(f"============ TURN {turn} ({player}) ============")
             delay_print("1. Attack")
             delay_print("2. Use Potion")
             delay_print("3. Quit")
@@ -121,12 +176,11 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
             print ("")
             if (pilihan=="3"):
                 if (n>=1):
-                    arena(data,user_data,2,n,dmg_taken,dmg_given,player,power_p,def_p,hp_ori,lvl_p)
+                    arena(data,user_data,2,n,dmg_taken,dmg_given,player,power_p,def_p,hp_ori,lvl_p,monster_p)
                 else:
                     delay_print("Anda berhasil kabur dari BATTLE!")
                 match=False
             elif(pilihan == "1"):
-                ascii_battle(monster_p)
                 delay_print(f"SCHWINKKK, {player} menyerang {nama_m} \n")
                 att=attack_monster_b(power_p)
                 serangan=def_monster_b(def_m,att)
@@ -145,11 +199,11 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
                 delay_print (f"HP         : {hp_m}")
                 delay_print (f"Level      : {lvl_m}\n")
                 if (hp_m==0):
+                    delay_print (f"Selamat, Anda berhasil mengalahkan monster {nama_m} !!! \n")
                     if (n>=1):
                         n+=1
-                        arena(data,user_data,1,n,dmg_taken,dmg_given,player,power_p,def_p,hp_ori,lvl_p)
+                        arena(data,user_data,1,n,dmg_taken,dmg_given,player,power_p,def_p,hp_ori,lvl_p,monster_p)
                     else:
-                        delay_print (f"Selamat, Anda berhasil mengalahkan monster {nama_m} !!! \n")
                         oc=random_number_generator(5,30)
                         delay_print (f"Total OC yang diperoleh: {oc}")
                         data[4]=str(int(data[4])+oc)

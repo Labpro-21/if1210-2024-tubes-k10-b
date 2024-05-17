@@ -66,7 +66,7 @@ def menu(folder_name: str) -> None:
         elif choice == "LABORATORY" and is_login and not is_admin:
             laboratory(user_login, user_data)
         elif choice == "BATTLE" and is_login and not is_admin:
-            battle(user_login ,user_data ,0,"null",0,0,0,0,0,0)
+            battle(user_login ,user_data ,0,"null",0,0,0,0,0,0,1)
         elif choice == "LOGOUT":
             logout(is_login)
             if is_login:
@@ -76,6 +76,6 @@ def menu(folder_name: str) -> None:
             is_exit = True
             leave(user_data)
         elif choice == "ARENA" and is_login and not is_admin:
-            arena(user_login,user_data,1,1,0,0,"null",0,0,0,0)
+            arena(user_login,user_data,1,1,0,0,"null",0,0,0,0,1)
         elif choice == "SAVE":
             save(user_data)

@@ -29,7 +29,7 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
         for i in range (0,len(user_data["monster_inventory.csv"])):
             if (user_data["monster_inventory.csv"][i][0]==data[0]):
                 indeks=int(user_data["monster_inventory.csv"][i][1])+1
-                delay_print(f"{j}. {user_data['monster.csv'][indeks][1]}")
+                delay_print(f"{j}. {user_data['monster.csv'][indeks][1]}, level: {user_data['monster_inventory.csv'][i][2]}")
                 j+=1
                 list_lvl.append(int(user_data["monster_inventory.csv"][i][2]))
                 list_power.append(int(user_data["monster.csv"][indeks][2]))
@@ -92,7 +92,7 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
         for i in range (0,len(user_data["monster_inventory.csv"])):
             if (user_data["monster_inventory.csv"][i][0]==data[0]):
                 indeks=int(user_data["monster_inventory.csv"][i][1])+1
-                delay_print(f"{j}. {user_data['monster.csv'][indeks][1]}")
+                delay_print(f"{j}. {user_data['monster.csv'][indeks][1]}, level: {user_data['monster_inventory.csv'][i][2]}")
                 j+=1
                 list_lvl.append(int(user_data["monster_inventory.csv"][i][2]))
                 list_power.append(int(user_data["monster.csv"][indeks][2]))
@@ -234,7 +234,11 @@ def battle(data: List[str], user_data: Mapping ,n: int,player,power_p,def_p,hp_p
                         delay_print (f"2. Resilience Potion (Qty: {list_potion[2]}) - Increases DEF Power")
                         delay_print (f"3. Healing Potion (Qty: {list_potion[3]}) - Restores Health")
                         delay_print ("4. Cancel")
-                        pilihan_p = int(input("Pilihan Potion: "))
+                        pilihan_p=(input("Pilihan Potion: "))
+                        while not is_number(pilihan_p):
+                            delay_print("Masukkan harus bertipe Integer, coba lagi!")
+                            pilihan_p=(input("Pilihan Potion: "))
+                        pilihan_p=int(pilihan_p)
                         print("")
                         if (pilihan_p == 1) :
                             if (list_potion[1]==0):

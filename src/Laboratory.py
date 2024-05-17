@@ -47,7 +47,7 @@ def laboratory(user_login: List[str], user_data: Mapping):
     print("2. Level 2 -> Level 3: 500 OC")
     print("3. Level 3 -> Level 4: 800 OC")
     print("4. Level 4 -> Level 5: 1000 OC")
- 
+    print(f"\nOC yang Anda miliki : {user_login[4]}\n")
     harga = {
         "2": 300,
         "3": 500,

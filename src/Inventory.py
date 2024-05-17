@@ -1,6 +1,7 @@
 from .helper.ListManipulation import to_list, readlines
 from .helper.IsType import is_number
 from typing import List, Tuple, Dict
+from src.Monster import stats_Monster
 
 Matrix = List[List[str]]
 Mapping = Dict[str, Matrix]
@@ -49,7 +50,7 @@ def inventory(data: List[str], user_data: Mapping) -> None:
     all_data: Matrix = concat_monster_item(monster_inv, item_inv)
     for inv in monster_inv:
         print("%s. Monster\t(Name: %s, Lvl: %s, HP: %s)" %
-              (num, inv[3], inv[2], inv[6]))
+              (num, inv[3], inv[2], str(stats_Monster(int(inv[2]),int(inv[6])))))
         num += 1
 
     kamus_potion = {
@@ -64,7 +65,7 @@ def inventory(data: List[str], user_data: Mapping) -> None:
 
     c = ""
     while c != "KELUAR":
-        print("\nKetikkan id untuk menampilkan detail item:")
+        print("\nKetikkan id untuk menampilkan detail item atau [KELUAR] untuk keluar dari inventory:")
         c = input(">>> ")
         if c != "KELUAR" and is_number(c):
             if 1 <= int(c) <= len(all_data):
@@ -72,9 +73,9 @@ def inventory(data: List[str], user_data: Mapping) -> None:
                 if all_data[c][0] == 'monster':
                     print("Monster")
                     print("Name\t  : %s" % (all_data[c][1][3]))
-                    print("ATK Power : %s" % (all_data[c][1][4]))
-                    print("DEF Power : %s" % (all_data[c][1][5]))
-                    print("HP\t  : %s" % (all_data[c][1][6]))
+                    print("ATK Power : %s" % (str(stats_Monster(int(all_data[c][1][2]),int(all_data[c][1][4])))))
+                    print("DEF Power : %s" % (str(stats_Monster(int(all_data[c][1][2]),int(all_data[c][1][5])))))
+                    print("HP\t  : %s" % (str(stats_Monster(int(all_data[c][1][2]),int(all_data[c][1][6])))))
                     print("Level\t  : %s" % (all_data[c][1][2]))
                 elif all_data[c][0] == 'potion':
                     print("Potion")

@@ -16,7 +16,7 @@ def verification(user: str, password: str, user_data: Matrix) -> Tuple[List[str]
             return (row, 1)
         elif user == row[1] and password != row[2]:
             print('Wrong password, try again!')
-            return ([], 1)
+            return ([], 2)
 
     print("Username doesn't exist!")
     return ([], 3)

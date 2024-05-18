@@ -34,7 +34,7 @@ def menu(folder_name: str) -> None:
             if is_admin:
                 help_message_admin()
             elif is_login:
-                help_message_agent()
+                help_message_agent(user_login[1])
             else:
                 help_message_before_login()
         elif choice == "REGISTER":
@@ -66,7 +66,7 @@ def menu(folder_name: str) -> None:
         elif choice == "LABORATORY" and is_login and not is_admin:
             laboratory(user_login, user_data)
         elif choice == "BATTLE" and is_login and not is_admin:
-            battle(user_login ,user_data ,0,"null",0,0,0,0,0,0,1)
+            battle(user_login, user_data, 0, "null", 0, 0, 0, 0, 0, 0, 1)
         elif choice == "LOGOUT":
             logout(is_login)
             if is_login:
@@ -76,6 +76,6 @@ def menu(folder_name: str) -> None:
             is_exit = True
             leave(user_data)
         elif choice == "ARENA" and is_login and not is_admin:
-            arena(user_login,user_data,1,1,0,0,"null",0,0,0,0,1)
+            arena(user_login, user_data, 1, 1, 0, 0, "null", 0, 0, 0, 0, 1)
         elif choice == "SAVE":
             save(user_data)

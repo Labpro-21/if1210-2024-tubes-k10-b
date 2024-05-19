@@ -87,6 +87,7 @@ def add_monster(user_data: Mapping) -> None:
         choice: str = input("Tambahkan Monster ke database (Y/N): ")
     if choice.upper() == 'Y':
         user_data["monster.csv"].append([str(idn+1), name, atk_power, def_power, hp])
+        user_data["monster_shop.csv"].append([str(idn+1), "0", "0"])
         print("Monster baru telah ditambahkan!")
 
 

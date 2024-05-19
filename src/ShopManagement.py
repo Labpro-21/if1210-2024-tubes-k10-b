@@ -24,7 +24,6 @@ def tambah(user_data: Mapping) -> None:
             breaked = True
     if c == 'monster':
         contoh: Matrix = [["ID", "Type", "ATK Power", "DEF Power", "HP"],
-                          
                           ["4", "Cici", "10", "1000", "200"],
                           ["5", "Moskov", "20", "1000", "200"],
                           ["6", "Selena", "30", "430", "100"]]
@@ -35,8 +34,8 @@ def tambah(user_data: Mapping) -> None:
                 arr.append(i)
         table_print(arr)
         idx: str = get_idx(arr, 'monster')
-        stock: str = get_stock()
-        price: str = get_price()
+        stock: str = get_stock("tambah")
+        price: str = get_price("tambah")
         idn: str = is_in(arr, idx, 0)
         user_data["monster.csv"].append(arr[idn])
         user_data["monster_shop.csv"].append([arr[idn][0], stock, price])
@@ -71,7 +70,6 @@ def ubah(user_data: Mapping) -> None:
         idx: str = get_idx(monster_list, 'monster')
         stock: str = get_stock()
         price: str = get_price()
-        txt_to_write: str = ""
         for i in range(len(monster_shop)):
             row = monster_shop[i]
             if row[0] == idx:
@@ -211,19 +209,29 @@ def verification_hapus(idx: str, user_data: Matrix) -> bool:
     return False
 
 
-def get_stock() -> str:
+def get_stock(s: str = "ubah") -> str:
     stock: str = input(">>> Masukkan stok baru: ")
-    while not (is_number(stock)) and len(stock) > 0:
-        print("Masukkan input bertipe Integer nonnegatif, coba lagi!\n")
-        stock = input(">>> Masukkan stok baru: ")
+    if s == 'tambah':
+        while not (is_number(stock)) or not len(stock) > 0:
+            print("Masukkan input bertipe Integer nonnegatif, coba lagi!\n")
+            stock = input(">>> Masukkan stok baru: ")
+    elif s == 'ubah':
+        while not (is_number(stock)) and len(stock) > 0:
+            print("Masukkan input bertipe Integer nonnegatif, coba lagi!\n")
+            stock = input(">>> Masukkan stok baru: ")
     return stock
 
 
-def get_price() -> str:
+def get_price(s: str = "ubah") -> str:
     price: str = input(">>> Masukkan harga baru: ")
-    while not (is_number(price)) and len(price) > 0:
-        print("Masukkan input bertipe Integer nonnegatif, coba lagi!\n")
-        price = input(">>> Masukkan harga baru: ")
+    if s == 'tambah':
+        while not (is_number(price)) or not len(price) > 0:
+            print("Masukkan input bertipe Integer nonnegatif, coba lagi!\n")
+            price = input(">>> Masukkan harga baru: ")
+    elif s == 'ubah':
+        while not (is_number(price)) and len(price) > 0:
+            print("Masukkan input bertipe Integer nonnegatif, coba lagi!\n")
+            price = input(">>> Masukkan harga baru: ")
     return price
 
 

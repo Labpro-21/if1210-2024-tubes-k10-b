@@ -26,7 +26,7 @@ def pprint(folder_name: str, c: int = 2) -> None:
         print()
     elif c <= 1:
         delayed_print("Membuat folder data/%s" % (folder_name))
-    print()
+        print()
     print("Berhasil menyimpan data di folder data/%s!" % (folder_name))
 
 def write_lines(file_name: str, folder_name: str, user_data: Mapping) -> None:
